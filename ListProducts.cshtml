@@ -1,0 +1,42 @@
+﻿@{
+    if (WebSecurityExt.IsAdmin==false){  Response.Redirect("~/AccessDenied");}
+
+    var db = Database.Open("Products");
+    var selectQueryString = "SELECT * FROM Products ORDER BY ID";
+    Layout = "~/_SiteLayout.cshtml";
+    Page.Title = "Products";
+ }
+
+<!DOCTYPE html>
+<html>
+ <head>
+   <title>GlassBox Products</title>
+ </head>
+ <body>
+   <h1>Your Products</h1>
+   <table>
+       <thead>
+           <tr>
+               <th>Id</th>
+               <th>Name</th>
+               <th>Description</th>
+               <th>Owner</th>
+               <th>Purchase Date</th>
+               <th>Price</th>
+           </tr>
+       </thead>
+       <tbody>
+           @foreach(var row in db.Query(selectQueryString)){
+            <tr>
+                <td>@row.Id</td>
+                <td>@row.Name</td>
+                <td>@row.Description</td>
+                <td>@row.Owner</td>
+                <td>@row.Purchase_Date</td>
+                <td>@row.Price</td>
+            </tr>
+           }
+       </tbody>
+   </table>
+ </body>
+</html>
