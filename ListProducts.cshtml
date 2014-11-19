@@ -1,5 +1,5 @@
 ﻿@{
-    if (WebSecurityExt.IsAdmin==false){  Response.Redirect("~/AccessDenied");}
+    if (WebSecurityExt.whatUser=="notregistered"){  Response.Redirect("~/AccessDenied");}
 
     var db = Database.Open("Products");
     var selectQueryString = "SELECT * FROM Products ORDER BY ID";

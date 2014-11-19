@@ -1,5 +1,5 @@
 ﻿@{
-    if (WebSecurityExt.IsAdmin==false){  Response.Redirect("~/AccessDenied");}
+    if (WebSecurityExt.whatUser == "notregistered") { Response.Redirect("~/AccessDenied"); }
     
     Layout = "~/_SiteLayout.cshtml";
     Page.Title = "Products";

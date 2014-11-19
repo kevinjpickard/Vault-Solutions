@@ -12,7 +12,7 @@ public class WebSecurityExt
     /// </summary> 
     /// <returns>true if the current user id has Role ID = 1 in the 
     /// webpages_UsersInRole table, otherwise false.</returns> 
-    static public bool IsAdmin 
+    static public string whatUser
     { 
         get 
         { 
@@ -22,21 +22,22 @@ public class WebSecurityExt
             if (userID == -1) 
             { 
                 // if the user does not exist, return not admin 
-                return false; 
+                return "notregistered"; 
             }
 
             // see if the user matches the RoleID you have for Admin 
             var db = Database.Open("StarterSite"); 
-            var SQLSELECT = "SELECT RoleID FROM webpages_UsersInRoles" + "WHERE UserID=@0"; 
-            var UserInRole = db.QuerySingle(SQLSELECT, userID); 
-            if (UserInRole.RoleID == 1) 
+            var strSQL = String.Format("SELECT RoleID FROM webpages_UsersInRoles WHERE UserID={0}", userID);
+            var UserInRole = db.QuerySingle(strSQL); 
+            if(UserInRole.RoleID == 1)
+            {
+                return "admin";                
+            }
+            else if(UserInRole.RoleID == 2)
             { 
-                return true; 
-            } 
-            else 
-            { 
-                return false; 
-            } 
+                return "user"; 
+            }
+            else { return "notregistered"; }
         } 
     } 
 }
