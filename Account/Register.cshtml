@@ -47,10 +47,6 @@
                 // Insert email into the profile table
                 db.Execute("INSERT INTO UserProfile (Email) VALUES (@0)", email);
 
-                // Assigning User Roles (by default assigns a RoleID of 2 [User])
-                var userid = WebSecurity.CurrentUserId;
-                db.Query("INSERT INTO webpages_UsersInRoles (UserId, RoleId) VALUES (@0,@1)", userid, 2);
-
                 // Create and associate a new entry in the membership database.
                 // If successful, continue processing the request
                 try {
@@ -67,6 +63,10 @@
                             body: "Your confirmation code is: " + token + ". Visit <a href=\"" + confirmationUrl + "\">" + confirmationUrl + "</a> to activate your account."
                         );
                     }
+                    
+                    // Assigning User Roles (by default assigns a RoleID of 2 [User])
+                    var userid = WebSecurity.CurrentUserId;
+                    db.Query("INSERT INTO webpages_UsersInRoles (UserId, RoleId) VALUES (@0,@1)", userid, 2);
 
                     if (requireEmailConfirmation) {
                         // Thank the user for registering and let them know an email is on its way
@@ -77,9 +77,10 @@
 
                         Response.Redirect("~/");
                     }
-                } catch (System.Web.Security.MembershipCreateUserException e) {
+                }catch (System.Web.Security.MembershipCreateUserException e) {
                     ModelState.AddFormError(e.Message);
                 }
+                
             } else {
                 // User already exists
                 ModelState.AddFormError("Email address is already in use.");
