@@ -47,10 +47,6 @@
                 // Insert email into the profile table
                 db.Execute("INSERT INTO UserProfile (Email) VALUES (@0)", email);
 
-                // Assigning User Roles (by default assigns a RoleID of 2 [User])
-                var userid = WebSecurity.CurrentUserId;
-                db.Query("INSERT INTO webpages_UsersInRoles (UserId, RoleId) VALUES (@0,@1)", userid, 2);
-
                 // Create and associate a new entry in the membership database.
                 // If successful, continue processing the request
                 try {
@@ -74,6 +70,10 @@
                     } else {
                         // Navigate back to the homepage and exit
                         WebSecurity.Login(email, password);
+
+                        // Assigning User Roles (by default assigns a RoleID of 2 [User])
+                        var userid = WebSecurity.GetUserId(email);
+                        db.Query("INSERT INTO webpages_UsersInRoles (UserId, RoleId) VALUES (@0,@1)", userid, 2);
 
                         Response.Redirect("~/");
                     }
